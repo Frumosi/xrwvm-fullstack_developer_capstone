@@ -4,6 +4,7 @@ const fs = require('fs');
 const  cors = require('cors')
 const app = express()
 const port = 3030;
+const { MongoClient, ObjectId } = require('mongodb');
 
 app.use(cors())
 app.use(require('body-parser').urlencoded({ extended: false }));
@@ -29,15 +30,6 @@ try {
 } catch (error) {
   res.status(500).json({ error: 'Error fetching documents' });
 }
-
-
-const { MongoClient, ObjectId } = require('mongodb');
-
-// Connection URL
-const url = 'mongodb://localhost:27017';
-const dbName = 'dealershipDB';
-
-
 
 
 // Express route to home
@@ -66,7 +58,6 @@ app.get('/fetchReviews/dealer/:id', async (req, res) => {
 });
 
 // Express route to fetch all dealerships
-//Write your code here
 app.get('/fetchDealers', async (req, res) => {
     const client = new MongoClient(url);
   
@@ -83,10 +74,9 @@ app.get('/fetchDealers', async (req, res) => {
     } finally {
       await client.close();
     }
-});
+  });
 
 // Express route to fetch Dealers by a particular state
-//Write your code here
 app.get('/fetchDealers/:state', async (req, res) => {
     const client = new MongoClient(url);
   
@@ -104,18 +94,35 @@ app.get('/fetchDealers/:state', async (req, res) => {
     } finally {
       await client.close();
     }
-});
+  });
+
+
 
 // Express route to fetch dealer by a particular id
-//Write your code here
 app.get('/fetchDealer/:id', async (req, res) => {
+    const client = new MongoClient(url);
+  
     try {
-        const documents = await Reviews.find({dealership: req.params.id});
-        res.json(documents);
-      } catch (error) {
-        res.status(500).json({ error: 'Error fetching documents' });
+      await client.connect();
+      const db = client.db(dbName);
+  
+      const id = req.params.id;
+      const dealer = await db.collection('dealers').findOne({ _id: new ObjectId(id) });
+  
+      if (!dealer) {
+        return res.status(404).send('Dealer not found');
       }
-});
+  
+      res.json(dealer);
+    } catch (err) {
+      console.error('Error fetching dealer by ID:', err);
+      res.status(500).send('Internal Server Error');
+    } finally {
+      await client.close();
+    }
+  });
+
+  
 
 //Express route to insert review
 app.post('/insert_review', express.raw({ type: '*/*' }), async (req, res) => {

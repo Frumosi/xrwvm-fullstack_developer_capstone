@@ -5,6 +5,7 @@ const  cors = require('cors')
 const app = express()
 const port = 3030;
 const { MongoClient, ObjectId } = require('mongodb');
+const router = express.Router();
 
 app.use(cors())
 app.use(require('body-parser').urlencoded({ extended: false }));
@@ -13,6 +14,9 @@ const reviews_data = JSON.parse(fs.readFileSync("reviews.json", 'utf8'));
 const dealerships_data = JSON.parse(fs.readFileSync("dealerships.json", 'utf8'));
 
 mongoose.connect("mongodb://mongo_db:27017/",{'dbName':'dealershipsDB'});
+
+const url = process.env.MONGO_URL || 'mongodb://mongo_db:27017/'; // Use environment variables for sensitive data
+const dbName = process.env.DB_NAME || 'dealershipsDB';
 
 
 const Reviews = require('./review');
@@ -57,6 +61,9 @@ app.get('/fetchReviews/dealer/:id', async (req, res) => {
   }
 });
 
+
+
+
 // Express route to fetch all dealerships
 app.get('/fetchDealers', async (req, res) => {
     const client = new MongoClient(url);
@@ -75,6 +82,7 @@ app.get('/fetchDealers', async (req, res) => {
       await client.close();
     }
   });
+
 
 // Express route to fetch Dealers by a particular state
 app.get('/fetchDealers/:state', async (req, res) => {
@@ -103,22 +111,23 @@ app.get('/fetchDealer/:id', async (req, res) => {
     const client = new MongoClient(url);
   
     try {
-      await client.connect();
-      const db = client.db(dbName);
+        await client.connect();
+        const db = client.db(dbName);
+        
+        const id = req.params.id;
+        
+        const dealer = await db.collection('dealers').findOne({ _id: new ObjectId(id) });
   
-      const id = req.params.id;
-      const dealer = await db.collection('dealers').findOne({ _id: new ObjectId(id) });
+        if (!dealer) {
+            return res.status(404).send('Dealer not found');
+        }
   
-      if (!dealer) {
-        return res.status(404).send('Dealer not found');
-      }
-  
-      res.json(dealer);
+        res.json(dealer);
     } catch (err) {
-      console.error('Error fetching dealer by ID:', err);
-      res.status(500).send('Internal Server Error');
+        console.error('Error fetching dealer by ID:', err);
+        res.status(500).send('Internal Server Error');
     } finally {
-      await client.close();
+        await client.close();
     }
   });
 

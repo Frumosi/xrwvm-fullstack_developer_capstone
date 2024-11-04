@@ -66,41 +66,24 @@ app.get('/fetchReviews/dealer/:id', async (req, res) => {
 
 // Express route to fetch all dealerships
 app.get('/fetchDealers', async (req, res) => {
-    const client = new MongoClient(url);
-  
     try {
-      await client.connect();
-      const db = client.db(dbName);
-  
-      const dealers = await db.collection('dealers').find({}).toArray();
-  
-      res.json(dealers);
-    } catch (err) {
-      console.error('Error fetching dealers:', err);
-      res.status(500).send('Internal Server Error');
-    } finally {
-      await client.close();
+      const documents = await Dealerships.find();
+      res.json(documents);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching dealerships' });
     }
   });
+  
 
 
 // Express route to fetch Dealers by a particular state
 app.get('/fetchDealers/:state', async (req, res) => {
-    const client = new MongoClient(url);
-  
     try {
-      await client.connect();
-      const db = client.db(dbName);
-  
-      const state = req.params.state;
-      const dealers = await db.collection('dealers').find({ state: state }).toArray();
-  
-      res.json(dealers);
-    } catch (err) {
-      console.error('Error fetching dealers by state:', err);
-      res.status(500).send('Internal Server Error');
-    } finally {
-      await client.close();
+      const documents = await Dealerships.find({ state: req.params.state });
+      res.json(documents);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error });
     }
   });
 
@@ -108,29 +91,14 @@ app.get('/fetchDealers/:state', async (req, res) => {
 
 // Express route to fetch dealer by a particular id
 app.get('/fetchDealer/:id', async (req, res) => {
-    const client = new MongoClient(url);
-  
     try {
-        await client.connect();
-        const db = client.db(dbName);
-        
-        const id = req.params.id;
-        
-        const dealer = await db.collection('dealers').findOne({ _id: new ObjectId(id) });
-  
-        if (!dealer) {
-            return res.status(404).send('Dealer not found');
-        }
-  
-        res.json(dealer);
-    } catch (err) {
-        console.error('Error fetching dealer by ID:', err);
-        res.status(500).send('Internal Server Error');
-    } finally {
-        await client.close();
+      const documents = await Dealerships.find({ id: req.params.id });
+      res.json(documents);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching dealers by ID' });
     }
   });
-
+  
   
 
 //Express route to insert review

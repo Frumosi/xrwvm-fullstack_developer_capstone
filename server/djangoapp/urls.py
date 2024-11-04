@@ -17,7 +17,9 @@ urlpatterns = [
     # path for registration
     path(route='register/', view=views.registration, name='register'),
 
-    # path for dealer reviews view
+    # path for get_dealerships view method
+    path(route='get_dealers', view=views.get_dealerships, name='get_dealers'),
+    path(route='get_dealers/<str:state>', view=views.get_dealerships, name='get_dealers_by_state'),
 
     # path for add a review view
 

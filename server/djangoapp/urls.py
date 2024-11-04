@@ -24,6 +24,9 @@ urlpatterns = [
     # path for get_dealer_details view method
     path(route='dealer/<int:dealer_id>', view=views.get_dealer_details, name='dealer_details'),
 
+    #path for get_dealer_reviews view method
+    path(route='reviews/dealer/<int:dealer_id>', view=views.get_dealer_reviews, name='dealer_details'),
+
     # path for get car
     path(route='get_cars', view=views.get_cars, name ='getcars'),
 

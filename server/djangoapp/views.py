@@ -39,15 +39,14 @@ def login_user(request):
         data = {"userName": username, "status": "Authenticated"}
     return JsonResponse(data)
 
+
 # Create a `logout_request` view to handle sign out request
 def logout_request(request):
     logout(request)
     return JsonResponse({"userName": ""})
 
 
-
 # Create a `registration` view to handle sign up request
-# @csrf_exempt
 @csrf_exempt
 def registration(request):
     context = {}

@@ -10,6 +10,7 @@ class CarModelInline(admin.TabularInline):  # or use admin.StackedInline
     extra = 1
 
 # CarModelAdmin class
+
 class CarModelAdmin(admin.ModelAdmin):
     list_display = ('model_name', 'year', 'car')  # Fields to display in the list view
     search_fields = ('model_name', 'car__name')   # Fields to enable search functionality

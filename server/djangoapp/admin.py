@@ -8,10 +8,10 @@ class CarModelInline(admin.TabularInline):  # or use admin.StackedInline
 
 
 class CarModelAdmin(admin.ModelAdmin):
-    list_display = ('model_name', 'year', 'car')  
-    search_fields = ('model_name', 'car__name') 
-    list_filter = ('year', 'car')                
-    ordering = ('-year',)                         
+    list_display = ('model_name', 'year', 'car')
+    search_fields = ('model_name', 'car__name')
+    list_filter = ('year', 'car')
+    ordering = ('-year',)
 
 
 class CarMakeAdmin(admin.ModelAdmin):

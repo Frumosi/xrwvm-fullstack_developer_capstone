@@ -7,7 +7,7 @@ from .models import CarMake, CarModel
 # CarModelInline class
 class CarModelInline(admin.TabularInline):  # or use admin.StackedInline
     model = CarModel
-    extra = 1  # Number of empty forms displayed to add new `CarModel` instances
+    extra = 1
 
 # CarModelAdmin class
 class CarModelAdmin(admin.ModelAdmin):

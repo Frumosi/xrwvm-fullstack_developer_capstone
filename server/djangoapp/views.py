@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 # from datetime import datetime
 
 from django.http import JsonResponse
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import logout, login, authenticate
 import logging
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -40,10 +40,10 @@ def login_user(request):
     return JsonResponse(data)
 
 # Create a `logout_request` view to handle sign out request
-
 def logout_request(request):
-    data = {"userName":""}
-    return JsonResponse(data)
+    logout(request)
+    return JsonResponse({"userName": ""})
+
 
 
 # Create a `registration` view to handle sign up request

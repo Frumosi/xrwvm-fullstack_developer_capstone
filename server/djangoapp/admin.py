@@ -5,11 +5,14 @@ from .models import CarMake, CarModel
 # Register your models here.
 
 # CarModelInline class
+
+
 class CarModelInline(admin.TabularInline):  # or use admin.StackedInline
     model = CarModel
     extra = 1
 
 # CarModelAdmin class
+
 
 class CarModelAdmin(admin.ModelAdmin):
     list_display = ('model_name', 'year', 'car')  # Fields to display in the list view

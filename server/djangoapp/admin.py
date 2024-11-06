@@ -2,7 +2,6 @@ from django.contrib import admin
 from .models import CarMake, CarModel
 
 
-
 class CarModelInline(admin.TabularInline):  # or use admin.StackedInline
     model = CarModel
     extra = 1
@@ -21,7 +20,7 @@ class CarMakeAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description')      # Search functionality for CarMake
     list_filter = ('name',)                      # Filter CarMakes by country
 
-    
+
 # Registering models with their respective admins
 admin.site.register(CarMake)
 admin.site.register(CarModel)

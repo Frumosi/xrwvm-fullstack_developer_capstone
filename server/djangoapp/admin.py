@@ -16,9 +16,9 @@ class CarModelAdmin(admin.ModelAdmin):
 
 class CarMakeAdmin(admin.ModelAdmin):
     inlines = [CarModelInline]
-    list_display = ('name', 'description')       # Fields displayed in the CarMake list view
-    search_fields = ('name', 'description')      # Search functionality for CarMake
-    list_filter = ('name',)                      # Filter CarMakes by country
+    list_display = ('name', 'description')
+    search_fields = ('name', 'description')
+    list_filter = ('name',)
 
 
 # Registering models with their respective admins

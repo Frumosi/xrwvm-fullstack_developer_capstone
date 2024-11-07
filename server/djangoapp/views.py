@@ -1,11 +1,8 @@
 # Uncomment the required imports before adding the code
 
-# from django.shortcuts import render
-# from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
-# from django.shortcuts import get_object_or_404, redirect
-# from django.contrib import messages
-# from datetime import datetime
+
+from .restapis import get_request, analyze_review_sentiments, post_review
 
 from django.http import JsonResponse
 from django.contrib.auth import logout, login, authenticate
@@ -14,7 +11,9 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from .populate import initiate
 from .models import CarMake, CarModel
-from .restapis import get_request, analyze_review_sentiments, post_review
+
+
+
 
 
 # Get an instance of a logger
@@ -106,16 +105,19 @@ def get_dealer_details(request, dealer_id):
 
 
 def add_review(request):
-    if not request.user.is_anonymous:
+    if (request.user.is_anonymous is False):
         data = json.loads(request.body)
         try:
             post_review(data)
             return JsonResponse({"status": 200})
         except Exception:
-            return JsonResponse(
-                {"status": 401, "message": "Error in posting review"}
-            )
-    return JsonResponse({"status": 403, "message": "Unauthorized"})
+            return JsonResponse({"status": 401,
+                                 "message": "Error in posting review"})
+        finally:
+            print("add_review request successful!")
+    else:
+        return JsonResponse({"status": 403,
+                             "message": "Unauthorized"})
 
 
 # Create a 'get_cars' to get the list of cars
